@@ -27,12 +27,16 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         shouldDisplayHomeUp();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navView = (NavigationView) findViewById(R.id.navview);
-        BienvenidoFragment fragmentInicio = new BienvenidoFragment();
+       /*BienvenidoFragment fragmentInicio = new BienvenidoFragment();
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.contenido, fragmentInicio)
+                .commit();*/
+        MapaFragment mapaFragment= new MapaFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.contenido, mapaFragment)
                 .commit();
-
         navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override

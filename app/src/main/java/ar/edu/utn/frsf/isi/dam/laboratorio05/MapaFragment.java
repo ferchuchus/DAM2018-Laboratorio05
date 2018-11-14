@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ import java.util.Objects;
  */
 public class MapaFragment extends SupportMapFragment implements OnMapReadyCallback {
     private GoogleMap miMapa;
+    private OnMapaListener listener;
 
     public MapaFragment() {
     }
@@ -43,6 +45,12 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap map) {
         miMapa = map;
+        miMapa.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                listener.coordenadasSeleccionadas(latLng);
+            }
+        });
         actualizarMapa();
     }
 
@@ -53,5 +61,13 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
                     9999);
         }
         miMapa.setMyLocationEnabled(true);
+    }
+
+    public interface OnMapaListener {
+        public void coordenadasSeleccionadas(LatLng c);
+    }
+
+    public void setListener(OnMapaListener listener){
+        this.listener=listener;
     }
 }

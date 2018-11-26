@@ -73,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                                 if (fragment == null) {
                                     fragment = new MapaFragment();
                                     Bundle bundle = new Bundle();
-                                    bundle.getInt("tipo_mapa", 0);
+                                    bundle.putInt("tipo_mapa", 2);
+                                    fragment.setArguments(bundle);
+                                    ((MapaFragment) fragment).setListener(MainActivity.this);
                                 }
                                 fragmentTransaction = true;
                                 break;

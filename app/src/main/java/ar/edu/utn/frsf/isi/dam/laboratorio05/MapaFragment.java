@@ -3,6 +3,7 @@ package ar.edu.utn.frsf.isi.dam.laboratorio05;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -33,12 +36,14 @@ import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.ReclamoDao;
  * A simple {@link Fragment} subclass.
  */
 public class MapaFragment extends SupportMapFragment implements OnMapReadyCallback {
-    private static final int EVENTO_UPDATE_MAP=50;
+    private static final int EVENTO_LISTA_RECLAMOS=1;
+    private static final int EVENTO_RECLAMO=2;
     private GoogleMap miMapa;
     private OnMapaListener listener;
     private int tipoMapa=0;
     private ArrayList<Reclamo> listaReclamos= new ArrayList<Reclamo>();
     private ReclamoDao reclamoDao;
+    private Reclamo reclamo;
 
     public MapaFragment() {
     }
@@ -72,6 +77,9 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
            case 2:
                obtenerReclamos();
                break;
+            case 3:
+                obtenerReclamo();
+                break;
 
        }
        actualizarMapa();
@@ -100,7 +108,7 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
             @Override
             public void run() {
                 listaReclamos.addAll(reclamoDao.getAll());
-                Message copleteMessage= handler.obtainMessage(EVENTO_UPDATE_MAP);
+                Message copleteMessage= handler.obtainMessage(EVENTO_LISTA_RECLAMOS);
                 copleteMessage.sendToTarget();
                 }
             };
@@ -108,23 +116,48 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
         thread.start();
     }
 
+    private void obtenerReclamo(){
+        Runnable cargarReclamo=(new Runnable() {
+            @Override
+            public void run() {
+                reclamo=reclamoDao.getById(getArguments().getInt("idReclamo"));
+                Message completeMessage= handler.obtainMessage(EVENTO_RECLAMO);
+                completeMessage.sendToTarget();
+            }
+        });
+        Thread thread= new Thread(cargarReclamo);
+        thread.start();
+    }
+
     Handler handler= new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==EVENTO_UPDATE_MAP){
-                ArrayList<MarkerOptions> marcadores= new ArrayList<>();
-                for(int i=0; listaReclamos.size()>i; i++){
-                    LatLng latLng= new LatLng(listaReclamos.get(i).getLatitud(),
-                            listaReclamos.get(i).getLongitud());
+            CameraUpdate cu;
+            switch (msg.what){
+                case EVENTO_LISTA_RECLAMOS:
+                    ArrayList<MarkerOptions> marcadores= new ArrayList<>();
+                    for(int i=0; listaReclamos.size()>i; i++){
+                        LatLng latLng= new LatLng(listaReclamos.get(i).getLatitud(),
+                                listaReclamos.get(i).getLongitud());
+                        miMapa.addMarker(new MarkerOptions().position(latLng));
+                        marcadores.add(new MarkerOptions().position(latLng));
+                    }
+                    LatLngBounds.Builder builder= new LatLngBounds.Builder();
+                    for(MarkerOptions markerOptions: marcadores) builder.include(markerOptions.getPosition());
+                    LatLngBounds bounds= builder.build();
+                    cu= CameraUpdateFactory.newLatLngBounds(bounds, 0);
+                    miMapa.moveCamera(cu);
+                    break;
+                case EVENTO_RECLAMO:
+                    LatLng latLng= new LatLng(reclamo.getLatitud(), reclamo.getLongitud());
                     miMapa.addMarker(new MarkerOptions().position(latLng));
-                    marcadores.add(new MarkerOptions().position(latLng));
-                }
-                LatLngBounds.Builder builder= new LatLngBounds.Builder();
-                for(MarkerOptions markerOptions: marcadores) builder.include(markerOptions.getPosition());
-                LatLngBounds bounds= builder.build();
-                int padding= 0;
-                CameraUpdate cu= CameraUpdateFactory.newLatLngBounds(bounds, padding);
-                miMapa.moveCamera(cu);
+                    Circle circulo= miMapa.addCircle(new CircleOptions().center(latLng)
+                    .radius(500));
+                    circulo.setFillColor(Color.TRANSPARENT);
+                    circulo.setStrokeColor(Color.RED);
+                    cu= CameraUpdateFactory.newLatLngZoom(latLng, 15.0f);
+                    miMapa.moveCamera(cu);
+                    break;
             }
         }
     };

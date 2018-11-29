@@ -24,6 +24,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -38,6 +41,7 @@ import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.ReclamoDao;
 public class MapaFragment extends SupportMapFragment implements OnMapReadyCallback {
     private static final int EVENTO_LISTA_RECLAMOS=1;
     private static final int EVENTO_RECLAMO=2;
+    private static final int EVENTO_MAPA_CALOR=3;
     private GoogleMap miMapa;
     private OnMapaListener listener;
     private int tipoMapa=0;
@@ -80,6 +84,9 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
             case 3:
                 obtenerReclamo();
                 break;
+            case 4:
+                obtenerReclamos();
+                break;
 
        }
        actualizarMapa();
@@ -108,8 +115,10 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
             @Override
             public void run() {
                 listaReclamos.addAll(reclamoDao.getAll());
-                Message copleteMessage= handler.obtainMessage(EVENTO_LISTA_RECLAMOS);
-                copleteMessage.sendToTarget();
+                Message completeMessage;
+                if(tipoMapa==2) completeMessage= handler.obtainMessage(EVENTO_LISTA_RECLAMOS);
+                else completeMessage= handler.obtainMessage(EVENTO_MAPA_CALOR);
+                completeMessage.sendToTarget();
                 }
             };
         Thread thread= new Thread(cargarReclamos);
@@ -133,11 +142,12 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
         @Override
         public void handleMessage(Message msg) {
             CameraUpdate cu;
+            LatLng latLng;
             switch (msg.what){
                 case EVENTO_LISTA_RECLAMOS:
                     ArrayList<MarkerOptions> marcadores= new ArrayList<>();
                     for(int i=0; listaReclamos.size()>i; i++){
-                        LatLng latLng= new LatLng(listaReclamos.get(i).getLatitud(),
+                        latLng= new LatLng(listaReclamos.get(i).getLatitud(),
                                 listaReclamos.get(i).getLongitud());
                         miMapa.addMarker(new MarkerOptions().position(latLng));
                         marcadores.add(new MarkerOptions().position(latLng));
@@ -149,7 +159,7 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
                     miMapa.moveCamera(cu);
                     break;
                 case EVENTO_RECLAMO:
-                    LatLng latLng= new LatLng(reclamo.getLatitud(), reclamo.getLongitud());
+                    latLng= new LatLng(reclamo.getLatitud(), reclamo.getLongitud());
                     miMapa.addMarker(new MarkerOptions().position(latLng));
                     Circle circulo= miMapa.addCircle(new CircleOptions().center(latLng)
                     .radius(500));
@@ -158,6 +168,23 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
                     cu= CameraUpdateFactory.newLatLngZoom(latLng, 15.0f);
                     miMapa.moveCamera(cu);
                     break;
+                case EVENTO_MAPA_CALOR:
+                    ArrayList<LatLng>coordenadas = new ArrayList<>();
+                    LatLngBounds.Builder builder1= new LatLngBounds.Builder();
+                    for(int i=0; listaReclamos.size()>i; i++){
+                        latLng= new LatLng(listaReclamos.get(i).getLatitud(),
+                                listaReclamos.get(i).getLongitud());
+                        coordenadas.add(latLng);
+                        builder1.include(latLng);
+                    }
+                    TileProvider heatMapTileProvider = new HeatmapTileProvider.Builder().data(coordenadas)
+                            .build();
+                    miMapa.addTileOverlay(new TileOverlayOptions().tileProvider(heatMapTileProvider));
+                    LatLngBounds latLngBounds= builder1.build();
+                    cu= CameraUpdateFactory.newLatLngBounds(latLngBounds, 0);
+                    miMapa.moveCamera(cu);
+                    break;
+
             }
         }
     };

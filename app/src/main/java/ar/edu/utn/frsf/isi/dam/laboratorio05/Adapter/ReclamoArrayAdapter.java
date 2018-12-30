@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.isi.dam.laboratorio05;
+package ar.edu.utn.frsf.isi.dam.laboratorio05.Adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ar.edu.utn.frsf.isi.dam.laboratorio05.R;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.Reclamo;
 
 public class ReclamoArrayAdapter extends ArrayAdapter<Reclamo> {

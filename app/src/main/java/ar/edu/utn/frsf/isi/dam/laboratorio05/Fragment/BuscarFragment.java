@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.isi.dam.laboratorio05;
+package ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment;
 
 
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ar.edu.utn.frsf.isi.dam.laboratorio05.R;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.Reclamo;
 
 public class BuscarFragment extends Fragment{

@@ -1,10 +1,12 @@
-package ar.edu.utn.frsf.isi.dam.laboratorio05;
+package ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import ar.edu.utn.frsf.isi.dam.laboratorio05.R;
 
 
 /**

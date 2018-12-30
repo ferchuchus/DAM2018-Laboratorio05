@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.isi.dam.laboratorio05;
+package ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment;
 
 
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import ar.edu.utn.frsf.isi.dam.laboratorio05.R;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.MyDatabase;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.Reclamo;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.ReclamoDao;

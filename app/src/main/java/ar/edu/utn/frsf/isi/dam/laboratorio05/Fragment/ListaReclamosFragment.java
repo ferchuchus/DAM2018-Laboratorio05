@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.isi.dam.laboratorio05;
+package ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +11,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.utn.frsf.isi.dam.laboratorio05.R;
+import ar.edu.utn.frsf.isi.dam.laboratorio05.Adapter.ReclamoArrayAdapter;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.MyDatabase;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.Reclamo;
 import ar.edu.utn.frsf.isi.dam.laboratorio05.modelo.ReclamoDao;

@@ -1,4 +1,4 @@
-package ar.edu.utn.frsf.isi.dam.laboratorio05;
+package ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment;
 
 
 import android.Manifest;

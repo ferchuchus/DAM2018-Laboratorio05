@@ -6,11 +6,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+
+import ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment.BuscarFragment;
+import ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment.ListaReclamosFragment;
+import ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment.MapaFragment;
+import ar.edu.utn.frsf.isi.dam.laboratorio05.Fragment.NuevoReclamoFragment;
 
 
 // AGREGAR en MapaFragment una interface MapaFragment.OnMapaListener con el método coordenadasSeleccionadas 

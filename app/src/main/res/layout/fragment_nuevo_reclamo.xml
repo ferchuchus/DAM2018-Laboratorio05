@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -13,21 +14,25 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/reclamo_coord"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_height="70dp"
+            android:layout_weight="1" />
+
         <Button
-            android:text="Buscar Coordenadas"
             android:id="@+id/btnBuscarCoordenadas"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_width="160dp"
+            android:layout_height="70dp"
+            android:text="Buscar Coordenadas" />
+
     </LinearLayout>
     <TextView
         android:text="Email de contacto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <EditText
         android:id="@+id/reclamo_mail"
         android:layout_width="match_parent"
@@ -36,10 +41,28 @@
         android:text="Descripcion reclamo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <EditText
         android:id="@+id/reclamo_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/iViewFoto"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:src="@android:drawable/ic_menu_camera" />
+
+    <Button
+        android:id="@+id/btnImagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:enabled="true"
+        android:gravity="center_vertical|center_horizontal|fill_horizontal"
+        android:text="Cargar Imagen" />
+
     <TextView
         android:text="Tipo de reclamo"
         android:layout_width="match_parent"

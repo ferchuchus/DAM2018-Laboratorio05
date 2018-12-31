@@ -11,17 +11,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,7 +46,7 @@ import static android.app.Activity.RESULT_OK;
 public class NuevoReclamoFragment extends Fragment {
 
     public interface OnNuevoLugarListener {
-        public void obtenerCoordenadas();
+       void obtenerCoordenadas();
     }
 
     public void setListener(OnNuevoLugarListener listener) {
@@ -115,22 +116,14 @@ public class NuevoReclamoFragment extends Fragment {
             idReclamo = getArguments().getInt("idReclamo", 0);
         }
 
-        cargarReclamo(idReclamo);
 
-        boolean edicionActivada = !tvCoord.getText().toString().equals("0;0");
-        reclamoDesc.setEnabled(edicionActivada);
-        mail.setEnabled(edicionActivada);
-        tipoReclamo.setEnabled(edicionActivada);
-        btnGuardar.setEnabled(edicionActivada);
-        btnCargarImagen.setEnabled(edicionActivada);
-        iBtnReproducir.setEnabled(false);
-        iBtnGrabar.setEnabled(true);
+        cargarReclamo(idReclamo);
+        iniciar();
 
         buscarCoord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.obtenerCoordenadas();
-
             }
         });
 
@@ -145,12 +138,36 @@ public class NuevoReclamoFragment extends Fragment {
 
                     } else {
                         sacarFoto();
+                        validacion(tipoReclamo.getSelectedItem().toString());
                     }
-                } else
+                } else {
                     sacarFoto();
+                    validacion(tipoReclamo.getSelectedItem().toString());
+                }
             }
         });
 
+        //Validación Reclamo
+
+        tipoReclamo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                validacion(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        reclamoDesc.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                validacion(tipoReclamo.getSelectedItem().toString());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +176,34 @@ public class NuevoReclamoFragment extends Fragment {
             }
         });
         return v;
+    }
+     private void vaciar(){
+         mail.setText(R.string.texto_vacio);
+         tvCoord.setText("0;0");
+         reclamoDesc.setText(R.string.texto_vacio);
+         getActivity().getFragmentManager().popBackStack();
+         iViewFoto.setImageResource(android.R.drawable.ic_menu_camera);
+         tipoReclamo.setSelection(0);
+        iniciar();
+     }
+    private void iniciar(){
+        boolean edicionActivada = !tvCoord.getText().toString().equals("0;0");
+        reclamoDesc.setEnabled(edicionActivada);
+        mail.setEnabled(edicionActivada);
+        tipoReclamo.setEnabled(edicionActivada);
+        btnGuardar.setEnabled(false);
+        btnCargarImagen.setEnabled(edicionActivada);
+        iBtnReproducir.setEnabled(false);
+        iBtnGrabar.setEnabled(edicionActivada);
+    }
+
+    private void validacion(String nombreTipo){
+        if ((nombreTipo.equals("VEREDAS")||nombreTipo.equals("CALLE_EN_MAL_ESTADO")) && directorioFoto != null)
+            btnGuardar.setEnabled(true);
+        else if ((!nombreTipo.equals("VEREDAS")&&!nombreTipo.equals("CALLE_EN_MAL_ESTADO"))&&(directorioAudio != null || reclamoDesc.getText().length() >= 8))
+            btnGuardar.setEnabled(true);
+        else
+            btnGuardar.setEnabled(false);
     }
 
     private void cargarReclamo(final int id) {
@@ -226,12 +271,8 @@ public class NuevoReclamoFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // limpiar vista
-                        mail.setText(R.string.texto_vacio);
-                        tvCoord.setText(R.string.texto_vacio);
-                        reclamoDesc.setText(R.string.texto_vacio);
-                        getActivity().getFragmentManager().popBackStack();
-                        iViewFoto.setImageResource(android.R.drawable.ic_menu_camera);
+                          vaciar();
+
                     }
                 });
             }
@@ -324,6 +365,7 @@ public class NuevoReclamoFragment extends Fragment {
             terminarReproducir();
             iBtnReproducir.setEnabled(true);
             iBtnGrabar.setEnabled(true);
+            validacion(tipoReclamo.getSelectedItem().toString());
         } else {
             reproduciendo = true;
             reproducir();
@@ -338,6 +380,7 @@ public class NuevoReclamoFragment extends Fragment {
             terminarGrabar();
             iBtnGrabar.setImageResource(android.R.drawable.presence_audio_online);
             iBtnReproducir.setEnabled(true);
+            validacion(tipoReclamo.getSelectedItem().toString());
         } else {
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String nombreArchivoAudio = "/MP3_" + timeStamp + ".3gp";

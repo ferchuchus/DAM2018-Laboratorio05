@@ -16,6 +16,10 @@ public class Reclamo {
     private Double longitud;
     private String reclamo;
     private String email;
+    private String pathFoto;
+    private String pathAudio;
+    @TypeConverters(TipoReclamoConverter.class)
+    private TipoReclamo tipo;
 
     public String getPathFoto() {
         return pathFoto;
@@ -25,9 +29,13 @@ public class Reclamo {
         this.pathFoto = pathFoto;
     }
 
-    private String pathFoto;
-    @TypeConverters(TipoReclamoConverter.class)
-    private TipoReclamo tipo;
+    public String getPathAudio() {
+        return pathAudio;
+    }
+
+    public void setPathAudio(String pathAudio) {
+        this.pathAudio = pathAudio;
+    }
 
     public Double getLatitud() {
         return latitud;

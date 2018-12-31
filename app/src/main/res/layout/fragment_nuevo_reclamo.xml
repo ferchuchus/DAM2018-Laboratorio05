@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragment.NuevoReclamoFragment">
+
     <TextView
-        android:text="Coordenadas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Coordenadas" />
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/reclamo_coord"
@@ -28,52 +30,91 @@
             android:text="Buscar Coordenadas" />
 
     </LinearLayout>
+
     <TextView
-        android:text="Email de contacto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Email de contacto" />
 
     <EditText
         android:id="@+id/reclamo_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <TextView
-        android:text="Descripcion reclamo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Descripcion reclamo" />
 
     <EditText
         android:id="@+id/reclamo_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/iViewFoto"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_vertical|center_horizontal|center"
-        android:src="@android:drawable/ic_menu_camera" />
-
-    <Button
-        android:id="@+id/btnImagen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:enabled="true"
-        android:gravity="center_vertical|center_horizontal|fill_horizontal"
-        android:text="Cargar Imagen" />
-
     <TextView
-        android:text="Tipo de reclamo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Tipo de reclamo" />
+
     <Spinner
         android:id="@+id/reclamo_tipo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></Spinner>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iViewFoto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@android:drawable/ic_menu_camera" />
+
+        <Button
+            android:id="@+id/btnImagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:enabled="true"
+            android:gravity="center_vertical|center_horizontal|fill_horizontal"
+            android:text="Cargar Imagen" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Grabar  y/o escuchar Audio" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/iBttnGrabar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@android:drawable/presence_audio_online" />
+
+        <ImageButton
+            android:id="@+id/iBttnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_play" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/btnGuardar"
-        android:text="Guardar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Guardar" />
+
 </LinearLayout>
